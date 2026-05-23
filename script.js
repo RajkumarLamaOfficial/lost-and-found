@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    let currentFilter = "All";
+
     const sampleItems = [
         {
             type: "Lost",
@@ -39,6 +41,14 @@ document.addEventListener("DOMContentLoaded", function () {
         displayItems();
         displayAdminItems();
         updateStats();
+    };
+
+    window.filterItems = function (filterType) {
+        currentFilter = filterType;
+
+        showSection("search");
+
+        displayItems();
     };
 
     const itemForm = document.getElementById("itemForm");
@@ -85,6 +95,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         itemForm.reset();
 
+        currentFilter = "All";
+
         showSection("search");
     }
 
@@ -96,12 +108,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const items = JSON.parse(localStorage.getItem("items")) || [];
 
-        const filteredItems = items.filter(item =>
-            item.itemName.toLowerCase().includes(searchValue) ||
-            item.category.toLowerCase().includes(searchValue) ||
-            item.location.toLowerCase().includes(searchValue) ||
-            item.description.toLowerCase().includes(searchValue)
-        );
+        const filteredItems = items.filter(item => {
+            const matchesSearch =
+                item.itemName.toLowerCase().includes(searchValue) ||
+                item.category.toLowerCase().includes(searchValue) ||
+                item.location.toLowerCase().includes(searchValue) ||
+                item.description.toLowerCase().includes(searchValue);
+
+            const matchesFilter =
+                currentFilter === "All" ||
+                item.type === currentFilter ||
+                item.status === currentFilter;
+
+            return matchesSearch && matchesFilter;
+        });
+
+        if (filteredItems.length === 0) {
+            itemList.innerHTML = `
+                <div class="empty-message">
+                    <h3>No items found</h3>
+                    <p>No reports match your selected filter or search keyword.</p>
+                </div>
+            `;
+            return;
+        }
 
         itemList.innerHTML = filteredItems.map(item => `
             <div class="item-card">
@@ -125,6 +155,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const adminList = document.getElementById("adminList");
 
         const items = JSON.parse(localStorage.getItem("items")) || [];
+
+        if (items.length === 0) {
+            adminList.innerHTML = `
+                <div class="empty-message">
+                    <h3>No reports available</h3>
+                    <p>There are no lost or found item reports yet.</p>
+                </div>
+            `;
+            return;
+        }
 
         adminList.innerHTML = items.map((item, index) => `
             <div class="item-card">
@@ -168,6 +208,12 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     window.deleteItem = function (index) {
+        const confirmDelete = confirm("Are you sure you want to delete this report?");
+
+        if (!confirmDelete) {
+            return;
+        }
+
         const items = JSON.parse(localStorage.getItem("items")) || [];
 
         items.splice(index, 1);

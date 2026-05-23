@@ -232,5 +232,16 @@ footer{
     margin-bottom: 12px;
     border: 1px solid #e5e7eb;
 }
+    .status{
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-left: 6px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: bold;
+}
 
 }

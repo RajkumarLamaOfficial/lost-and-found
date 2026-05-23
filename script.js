@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
             category: "ID Card",
             location: "Library",
             description: "Lost near study area.",
-            contact: "student@kdu.ac.kr"
+            contact: "student@kdu.ac.kr",
+            image: ""
         },
         {
             type: "Found",
@@ -15,7 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
             category: "Wallet",
             location: "Cafeteria",
             description: "Found near cafeteria counter.",
-            contact: "finder@kdu.ac.kr"
+            contact: "finder@kdu.ac.kr",
+            image: ""
         }
     ];
 
@@ -40,24 +42,42 @@ document.addEventListener("DOMContentLoaded", function () {
         itemForm.addEventListener("submit", function (e) {
             e.preventDefault();
 
-            const newItem = {
-                type: document.getElementById("type").value,
-                itemName: document.getElementById("itemName").value,
-                category: document.getElementById("category").value,
-                location: document.getElementById("location").value,
-                description: document.getElementById("description").value,
-                contact: document.getElementById("contact").value
-            };
+            const imageInput = document.getElementById("itemImage");
+            const imageFile = imageInput.files[0];
 
-            const items = JSON.parse(localStorage.getItem("items")) || [];
-            items.push(newItem);
-            localStorage.setItem("items", JSON.stringify(items));
+            if (imageFile) {
+                const reader = new FileReader();
 
-            alert("Report submitted successfully!");
-            itemForm.reset();
+                reader.onload = function () {
+                    saveItem(reader.result);
+                };
 
-            showSection("search");
+                reader.readAsDataURL(imageFile);
+            } else {
+                saveItem("");
+            }
         });
+    }
+
+    function saveItem(imageData) {
+        const newItem = {
+            type: document.getElementById("type").value,
+            itemName: document.getElementById("itemName").value,
+            category: document.getElementById("category").value,
+            location: document.getElementById("location").value,
+            description: document.getElementById("description").value,
+            contact: document.getElementById("contact").value,
+            image: imageData
+        };
+
+        const items = JSON.parse(localStorage.getItem("items")) || [];
+        items.push(newItem);
+        localStorage.setItem("items", JSON.stringify(items));
+
+        alert("Report submitted successfully!");
+        itemForm.reset();
+
+        showSection("search");
     }
 
     window.displayItems = function () {
@@ -79,6 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         itemList.innerHTML = filteredItems.map(item => `
             <div class="item-card">
+                ${item.image ? `<img src="${item.image}" class="item-image" alt="Item Image">` : ""}
                 <span class="badge">${item.type}</span>
                 <h3>${item.itemName}</h3>
                 <p><strong>Category:</strong> ${item.category}</p>
@@ -98,6 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         adminList.innerHTML = items.map((item, index) => `
             <div class="item-card">
+                ${item.image ? `<img src="${item.image}" class="item-image" alt="Item Image">` : ""}
                 <span class="badge">${item.type}</span>
                 <h3>${item.itemName}</h3>
                 <p><strong>Category:</strong> ${item.category}</p>

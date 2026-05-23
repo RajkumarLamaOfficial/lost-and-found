@@ -1,452 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KDU Smart Lost & Found System</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KDU Smart Lost & Found System</title>
 
-    body {
-      background: #f4f7fb;
-      color: #1f2937;
-    }
-
-    header {
-      background: linear-gradient(135deg, #1d4ed8, #0f766e);
-      color: white;
-      padding: 30px 8%;
-      text-align: center;
-    }
-
-    header h1 {
-      font-size: 34px;
-      margin-bottom: 10px;
-    }
-
-    header p {
-      font-size: 16px;
-      opacity: 0.95;
-    }
-
-    nav {
-      background: white;
-      padding: 15px 8%;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #1d4ed8;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    section {
-      padding: 40px 8%;
-      display: none;
-    }
-
-    section.active {
-      display: block;
-    }
-
-    .hero {
-      background: white;
-      border-radius: 18px;
-      padding: 35px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .hero h2 {
-      color: #1d4ed8;
-      margin-bottom: 15px;
-      font-size: 28px;
-    }
-
-    .hero p {
-      line-height: 1.7;
-      font-size: 16px;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 20px;
-      margin-top: 25px;
-    }
-
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.07);
-    }
-
-    .card h3 {
-      color: #0f766e;
-      margin-bottom: 10px;
-    }
-
-    .form-box {
-      background: white;
-      padding: 30px;
-      border-radius: 18px;
-      box-shadow: 0 5px 18px rgba(0,0,0,0.08);
-      max-width: 750px;
-      margin: auto;
-    }
-
-    .form-box h2 {
-      text-align: center;
-      color: #1d4ed8;
-      margin-bottom: 25px;
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      margin-top: 7px;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      font-size: 15px;
-    }
-
-    textarea {
-      resize: vertical;
-      height: 100px;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 12px 22px;
-      border: none;
-      border-radius: 10px;
-      background: #1d4ed8;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #1e40af;
-    }
-
-    .item-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-      margin-top: 25px;
-    }
-
-    .item-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      border-left: 6px solid #1d4ed8;
-    }
-
-    .item-card.found {
-      border-left-color: #0f766e;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 20px;
-      background: #dbeafe;
-      color: #1d4ed8;
-      font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .found .badge {
-      background: #ccfbf1;
-      color: #0f766e;
-    }
-
-    .search-box {
-      max-width: 600px;
-      margin: auto;
-      display: flex;
-      gap: 10px;
-    }
-
-    .search-box input {
-      margin-top: 0;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      background: #111827;
-      color: white;
-      margin-top: 40px;
-    }
-
-    .note {
-      margin-top: 15px;
-      background: #ecfeff;
-      padding: 15px;
-      border-radius: 10px;
-      border-left: 5px solid #06b6d4;
-    }
-  </style>
+    <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <header>
-    <h1>KDU Smart Lost & Found System</h1>
-    <p>A smart campus solution to help students report, search, and recover lost items easily.</p>
-  </header>
 
-  <nav>
-    <a onclick="showSection('home')">Home</a>
-    <a onclick="showSection('report')">Report Item</a>
-    <a onclick="showSection('search')">Search Items</a>
-    <a onclick="showSection('admin')">Admin Panel</a>
-  </nav>
+    <header>
+        <h1>KDU Smart Lost & Found System</h1>
+        <p>A smart campus solution for reporting and recovering lost items.</p>
+    </header>
 
-  <section id="home" class="active">
-    <div class="hero">
-      <h2>Making Lost-and-Found Easier at KDU</h2>
-      <p>This prototype helps students report lost or found items online. Instead of depending only on friends, notice boards, or social media, students can search all reported items in one place.</p>
-    </div>
+    <nav>
+        <a onclick="showSection('home')">Home</a>
+        <a onclick="showSection('report')">Report Item</a>
+        <a onclick="showSection('search')">Search Items</a>
+        <a onclick="showSection('admin')">Admin Panel</a>
+    </nav>
 
-    <div class="cards">
-      <div class="card">
-        <h3>Report Lost Items</h3>
-        <p>Students can submit information about an item they lost, including item name, category, location, date, and contact details.</p>
-      </div>
-      <div class="card">
-        <h3>Report Found Items</h3>
-        <p>Students or staff can post found items so the real owner can search and claim them.</p>
-      </div>
-      <div class="card">
-        <h3>Search and Filter</h3>
-        <p>Users can search items by name, category, location, or description to find possible matches quickly.</p>
-      </div>
-      <div class="card">
-        <h3>Claim Verification</h3>
-        <p>The system can ask claim questions to reduce fake claims and protect item owners.</p>
-      </div>
-    </div>
-  </section>
+    <!-- HOME -->
+    <section id="home" class="active">
 
-  <section id="report">
-    <div class="form-box">
-      <h2>Report Lost or Found Item</h2>
-      <form id="itemForm">
-        <label>Report Type</label>
-        <select id="type" required>
-          <option value="Lost">Lost Item</option>
-          <option value="Found">Found Item</option>
-        </select>
+        <div class="hero">
+            <h2>Welcome to KDU Smart Lost & Found System</h2>
 
-        <label>Item Name</label>
-        <input type="text" id="itemName" placeholder="Example: Student ID Card, Wallet, Charger" required />
-
-        <label>Category</label>
-        <select id="category" required>
-          <option value="ID Card">ID Card</option>
-          <option value="Electronics">Electronics</option>
-          <option value="Wallet">Wallet</option>
-          <option value="Keys">Keys</option>
-          <option value="Books/Notes">Books/Notes</option>
-          <option value="Clothing">Clothing</option>
-          <option value="Other">Other</option>
-        </select>
-
-        <label>Location</label>
-        <input type="text" id="location" placeholder="Example: Library, Cafeteria, Main Building" required />
-
-        <label>Date</label>
-        <input type="date" id="date" required />
-
-        <label>Description</label>
-        <textarea id="description" placeholder="Describe the item clearly. Do not reveal all secret details if it is a found item." required></textarea>
-
-        <label>Contact Information</label>
-        <input type="text" id="contact" placeholder="Email, phone number, or KakaoTalk ID" required />
-
-        <label>Claim Verification Question</label>
-        <input type="text" id="verify" placeholder="Example: What color is the wallet? What name is on the ID?" />
-
-        <button type="submit">Submit Report</button>
-      </form>
-      <div class="note">Note: In the final system, an admin can verify reports before showing them publicly.</div>
-    </div>
-  </section>
-
-  <section id="search">
-    <div class="hero">
-      <h2>Search Reported Items</h2>
-      <p>Search by item name, category, location, or description.</p>
-    </div>
-
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Search item..." oninput="displayItems()" />
-      <button onclick="clearSearch()">Clear</button>
-    </div>
-
-    <div id="itemList" class="item-list"></div>
-  </section>
-
-  <section id="admin">
-    <div class="hero">
-      <h2>Admin Panel Demo</h2>
-      <p>This section shows how university staff can monitor all lost-and-found reports.</p>
-    </div>
-    <div id="adminList" class="item-list"></div>
-  </section>
-
-  <footer>
-    <p>Developed for KDU Global Campus Research Project | Smart Lost-and-Found Management System</p>
-  </footer>
-
-  <script>
-    const sampleItems = [
-      {
-        type: 'Lost',
-        itemName: 'Student ID Card',
-        category: 'ID Card',
-        location: 'Main Building',
-        date: '2026-05-20',
-        description: 'Lost my KDU student ID card near the entrance area.',
-        contact: 'student@example.com',
-        verify: 'What name is written on the ID?'
-      },
-      {
-        type: 'Found',
-        itemName: 'Black Charger',
-        category: 'Electronics',
-        location: 'Library',
-        date: '2026-05-21',
-        description: 'A black phone charger was found on a study table.',
-        contact: 'founder@example.com',
-        verify: 'What phone brand is the charger for?'
-      }
-    ];
-
-    if (!localStorage.getItem('items')) {
-      localStorage.setItem('items', JSON.stringify(sampleItems));
-    }
-
-    function showSection(sectionId) {
-      document.querySelectorAll('section').forEach(section => {
-        section.classList.remove('active');
-      });
-      document.getElementById(sectionId).classList.add('active');
-      displayItems();
-      displayAdminItems();
-    }
-
-    document.getElementById('itemForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const newItem = {
-        type: document.getElementById('type').value,
-        itemName: document.getElementById('itemName').value,
-        category: document.getElementById('category').value,
-        location: document.getElementById('location').value,
-        date: document.getElementById('date').value,
-        description: document.getElementById('description').value,
-        contact: document.getElementById('contact').value,
-        verify: document.getElementById('verify').value || 'Verification required before claim.'
-      };
-
-      const items = JSON.parse(localStorage.getItem('items')) || [];
-      items.push(newItem);
-      localStorage.setItem('items', JSON.stringify(items));
-
-      alert('Your report has been submitted successfully.');
-      document.getElementById('itemForm').reset();
-      showSection('search');
-    });
-
-    function displayItems() {
-      const list = document.getElementById('itemList');
-      const searchInput = document.getElementById('searchInput');
-      if (!list) return;
-
-      const keyword = searchInput ? searchInput.value.toLowerCase() : '';
-      const items = JSON.parse(localStorage.getItem('items')) || [];
-
-      const filtered = items.filter(item =>
-        item.itemName.toLowerCase().includes(keyword) ||
-        item.category.toLowerCase().includes(keyword) ||
-        item.location.toLowerCase().includes(keyword) ||
-        item.description.toLowerCase().includes(keyword)
-      );
-
-      list.innerHTML = filtered.map(item => `
-        <div class="item-card ${item.type === 'Found' ? 'found' : ''}">
-          <span class="badge">${item.type}</span>
-          <h3>${item.itemName}</h3>
-          <p><strong>Category:</strong> ${item.category}</p>
-          <p><strong>Location:</strong> ${item.location}</p>
-          <p><strong>Date:</strong> ${item.date}</p>
-          <p><strong>Description:</strong> ${item.description}</p>
-          <p><strong>Contact:</strong> ${item.contact}</p>
-          <p><strong>Claim Check:</strong> ${item.verify}</p>
+            <p>
+                This system helps students report lost or found items easily
+                through a centralized online platform.
+            </p>
         </div>
-      `).join('');
-    }
 
-    function displayAdminItems() {
-      const adminList = document.getElementById('adminList');
-      if (!adminList) return;
+        <div class="cards">
 
-      const items = JSON.parse(localStorage.getItem('items')) || [];
+            <div class="card">
+                <h3>Report Lost Items</h3>
+                <p>Students can report items they lost on campus.</p>
+            </div>
 
-      adminList.innerHTML = items.map((item, index) => `
-        <div class="item-card ${item.type === 'Found' ? 'found' : ''}">
-          <span class="badge">${item.type}</span>
-          <h3>${item.itemName}</h3>
-          <p><strong>Category:</strong> ${item.category}</p>
-          <p><strong>Location:</strong> ${item.location}</p>
-          <p><strong>Status:</strong> Pending Review</p>
-          <button onclick="deleteItem(${index})">Remove Report</button>
+            <div class="card">
+                <h3>Report Found Items</h3>
+                <p>Students can upload found items to help owners recover them.</p>
+            </div>
+
+            <div class="card">
+                <h3>Search System</h3>
+                <p>Search items quickly using categories and keywords.</p>
+            </div>
+
         </div>
-      `).join('');
-    }
 
-    function deleteItem(index) {
-      const items = JSON.parse(localStorage.getItem('items')) || [];
-      items.splice(index, 1);
-      localStorage.setItem('items', JSON.stringify(items));
-      displayItems();
-      displayAdminItems();
-    }
+    </section>
 
-    function clearSearch() {
-      document.getElementById('searchInput').value = '';
-      displayItems();
-    }
+    <!-- REPORT -->
+    <section id="report">
 
-    displayItems();
-    displayAdminItems();
-  </script>
+        <div class="form-box">
+
+            <h2>Report Lost or Found Item</h2>
+
+            <form id="itemForm">
+
+                <label>Report Type</label>
+
+                <select id="type">
+
+                    <option value="Lost">Lost Item</option>
+                    <option value="Found">Found Item</option>
+
+                </select>
+
+                <label>Item Name</label>
+
+                <input type="text" id="itemName" required />
+
+                <label>Category</label>
+
+                <select id="category">
+
+                    <option>ID Card</option>
+                    <option>Electronics</option>
+                    <option>Wallet</option>
+                    <option>Keys</option>
+                    <option>Books</option>
+                    <option>Other</option>
+
+                </select>
+
+                <label>Location</label>
+
+                <input type="text" id="location" required />
+
+                <label>Description</label>
+
+                <textarea id="description"></textarea>
+
+                <label>Contact Information</label>
+
+                <input type="text" id="contact" required />
+
+                <button type="submit">Submit Report</button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+    <!-- SEARCH -->
+    <section id="search">
+
+        <div class="hero">
+
+            <h2>Search Reported Items</h2>
+
+            <p>Search items reported by students.</p>
+
+        </div>
+
+        <div class="search-box">
+
+            <input type="text" id="searchInput" placeholder="Search item..." oninput="displayItems()" />
+
+        </div>
+
+        <div id="itemList" class="item-list"></div>
+
+    </section>
+
+    <!-- ADMIN -->
+    <section id="admin">
+
+        <div class="hero">
+
+            <h2>Admin Panel</h2>
+
+            <p>University staff can monitor reports here.</p>
+
+        </div>
+
+        <div id="adminList" class="item-list"></div>
+
+    </section>
+
+    <footer>
+
+        <p>
+            Developed for KDU Research Project
+        </p>
+
+    </footer>
+
+    <script src="script.js"></script>
+
 </body>
 </html>

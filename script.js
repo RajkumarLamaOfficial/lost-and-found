@@ -8,7 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
             location: "Library",
             description: "Lost near study area.",
             contact: "student@kdu.ac.kr",
-            image: ""
+            image: "",
+            status: "Pending"
         },
         {
             type: "Found",
@@ -17,7 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
             location: "Cafeteria",
             description: "Found near cafeteria counter.",
             contact: "finder@kdu.ac.kr",
-            image: ""
+            image: "",
+            status: "Pending"
         }
     ];
 
@@ -67,7 +69,8 @@ document.addEventListener("DOMContentLoaded", function () {
             location: document.getElementById("location").value,
             description: document.getElementById("description").value,
             contact: document.getElementById("contact").value,
-            image: imageData
+            image: imageData,
+            status: "Pending"
         };
 
         const items = JSON.parse(localStorage.getItem("items")) || [];
@@ -101,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="item-card">
                 ${item.image ? `<img src="${item.image}" class="item-image" alt="Item Image">` : ""}
                 <span class="badge">${item.type}</span>
+                <span class="status">${item.status || "Pending"}</span>
                 <h3>${item.itemName}</h3>
                 <p><strong>Category:</strong> ${item.category}</p>
                 <p><strong>Location:</strong> ${item.location}</p>
@@ -124,9 +128,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 <h3>${item.itemName}</h3>
                 <p><strong>Category:</strong> ${item.category}</p>
                 <p><strong>Location:</strong> ${item.location}</p>
+                <p><strong>Status:</strong> ${item.status || "Pending"}</p>
+
+                <label>Update Status</label>
+                <select onchange="updateStatus(${index}, this.value)">
+                    <option value="Pending" ${(item.status || "Pending") === "Pending" ? "selected" : ""}>Pending</option>
+                    <option value="Approved" ${item.status === "Approved" ? "selected" : ""}>Approved</option>
+                    <option value="Claimed" ${item.status === "Claimed" ? "selected" : ""}>Claimed</option>
+                    <option value="Returned" ${item.status === "Returned" ? "selected" : ""}>Returned</option>
+                </select>
+
                 <button onclick="deleteItem(${index})">Delete</button>
             </div>
         `).join("");
+    };
+
+    window.updateStatus = function (index, status) {
+        const items = JSON.parse(localStorage.getItem("items")) || [];
+
+        items[index].status = status;
+
+        localStorage.setItem("items", JSON.stringify(items));
+
+        displayItems();
+        displayAdminItems();
     };
 
     window.deleteItem = function (index) {

@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         displayItems();
         displayAdminItems();
+        updateStats();
     };
 
     const itemForm = document.getElementById("itemForm");
@@ -157,6 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         displayItems();
         displayAdminItems();
+        updateStats();
     };
 
     window.deleteItem = function (index) {
@@ -168,9 +170,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         displayItems();
         displayAdminItems();
+        updateStats();
     };
+    function updateStats() {
+        const items = JSON.parse(localStorage.getItem("items")) || [];
+
+        const totalReports = items.length;
+        const lostReports = items.filter(item => item.type === "Lost").length;
+        const foundReports = items.filter(item => item.type === "Found").length;
+        const returnedReports = items.filter(item => item.status === "Returned").length;
+
+        document.getElementById("totalReports").textContent = totalReports;
+        document.getElementById("lostReports").textContent = lostReports;
+        document.getElementById("foundReports").textContent = foundReports;
+        document.getElementById("returnedReports").textContent = returnedReports;
+}
 
     displayItems();
     displayAdminItems();
+    updateStats();
 
 });

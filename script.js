@@ -45,9 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.filterItems = function (filterType) {
         currentFilter = filterType;
-
         showSection("search");
-
         displayItems();
     };
 
@@ -156,17 +154,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const items = JSON.parse(localStorage.getItem("items")) || [];
 
-        if (items.length === 0) {
-            adminList.innerHTML = `
+        const lostItems = items
+            .map((item, index) => ({ ...item, realIndex: index }))
+            .filter(item => item.type === "Lost");
+
+        const foundItems = items
+            .map((item, index) => ({ ...item, realIndex: index }))
+            .filter(item => item.type === "Found");
+
+        let html = "";
+
+        html += `<h2 class="admin-heading">Lost Item Reports</h2>`;
+
+        if (lostItems.length === 0) {
+            html += `
                 <div class="empty-message">
-                    <h3>No reports available</h3>
-                    <p>There are no lost or found item reports yet.</p>
+                    <h3>No lost item reports</h3>
+                    <p>No lost item has been reported yet.</p>
                 </div>
             `;
-            return;
+        } else {
+            html += lostItems.map(item => createAdminCard(item)).join("");
         }
 
-        adminList.innerHTML = items.map((item, index) => `
+        html += `<h2 class="admin-heading">Found Item Reports</h2>`;
+
+        if (foundItems.length === 0) {
+            html += `
+                <div class="empty-message">
+                    <h3>No found item reports</h3>
+                    <p>No found item has been reported yet.</p>
+                </div>
+            `;
+        } else {
+            html += foundItems.map(item => createAdminCard(item)).join("");
+        }
+
+        adminList.innerHTML = html;
+    };
+
+    function createAdminCard(item) {
+        return `
             <div class="item-card">
                 ${item.image ? `<img src="${item.image}" class="item-image" alt="Item Image">` : ""}
 
@@ -181,19 +209,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <label>Update Status</label>
 
-                <select onchange="updateStatus(${index}, this.value)">
+                <select onchange="updateStatus(${item.realIndex}, this.value)">
                     <option value="Pending" ${(item.status || "Pending") === "Pending" ? "selected" : ""}>Pending</option>
                     <option value="Approved" ${item.status === "Approved" ? "selected" : ""}>Approved</option>
                     <option value="Claimed" ${item.status === "Claimed" ? "selected" : ""}>Claimed</option>
                     <option value="Returned" ${item.status === "Returned" ? "selected" : ""}>Returned</option>
                 </select>
 
-                <button onclick="deleteItem(${index})">
+                <button onclick="deleteItem(${item.realIndex})">
                     <i class="fa-solid fa-trash"></i> Delete
                 </button>
             </div>
-        `).join("");
-    };
+        `;
+    }
 
     window.updateStatus = function (index, status) {
         const items = JSON.parse(localStorage.getItem("items")) || [];

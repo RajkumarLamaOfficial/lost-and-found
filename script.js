@@ -71,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
             contact: document.getElementById("contact").value,
             image: imageData,
             status: "Pending"
+            verification: document.getElementById("verification").value,
         };
 
         const items = JSON.parse(localStorage.getItem("items")) || [];
@@ -86,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.displayItems = function () {
         const itemList = document.getElementById("itemList");
         const searchInput = document.getElementById("searchInput");
+        
 
         if (!itemList) return;
 
@@ -110,12 +112,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 <p><strong>Location:</strong> ${item.location}</p>
                 <p><strong>Description:</strong> ${item.description}</p>
                 <p><strong>Contact:</strong> ${item.contact}</p>
+                <p><strong>Claim Verification:</strong> ${item.verification || "Not provided"}</p>
             </div>
         `).join("");
     };
 
     window.displayAdminItems = function () {
         const adminList = document.getElementById("adminList");
+        
 
         if (!adminList) return;
 
@@ -129,6 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <p><strong>Category:</strong> ${item.category}</p>
                 <p><strong>Location:</strong> ${item.location}</p>
                 <p><strong>Status:</strong> ${item.status || "Pending"}</p>
+                <p><strong>Claim Verification:</strong> ${item.verification || "Not provided"}</p>
 
                 <label>Update Status</label>
                 <select onchange="updateStatus(${index}, this.value)">

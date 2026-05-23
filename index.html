@@ -40,7 +40,7 @@
 
 </nav>
 
-<!-- HOME -->
+<!-- HOME SECTION -->
 
 <section id="home" class="active">
 
@@ -66,7 +66,7 @@
 
             </button>
 
-            <button onclick="showSection('search')" class="secondary-btn">
+            <button onclick="filterItems('All')" class="secondary-btn">
 
                 <i class="fa-solid fa-search"></i>
 
@@ -78,11 +78,11 @@
 
     </div>
 
-    <!-- STATS -->
+    <!-- DASHBOARD STATS -->
 
     <div class="stats">
 
-        <div class="stat-card" onclick="showSection('search')">
+        <div class="stat-card" onclick="filterItems('All')">
 
             <h3 id="totalReports">0</h3>
 
@@ -90,7 +90,7 @@
 
         </div>
 
-        <div class="stat-card" onclick="showSection('search')">
+        <div class="stat-card" onclick="filterItems('Lost')">
 
             <h3 id="lostReports">0</h3>
 
@@ -98,7 +98,7 @@
 
         </div>
 
-        <div class="stat-card" onclick="showSection('search')">
+        <div class="stat-card" onclick="filterItems('Found')">
 
             <h3 id="foundReports">0</h3>
 
@@ -106,7 +106,7 @@
 
         </div>
 
-        <div class="stat-card" onclick="showSection('admin')">
+        <div class="stat-card" onclick="filterItems('Returned')">
 
             <h3 id="returnedReports">0</h3>
 
@@ -120,7 +120,7 @@
 
     <div class="cards">
 
-        <div class="card">
+        <div class="card" onclick="showSection('report')">
 
             <i class="fa-solid fa-bullhorn card-icon"></i>
 
@@ -133,7 +133,7 @@
 
         </div>
 
-        <div class="card">
+        <div class="card" onclick="showSection('report')">
 
             <i class="fa-solid fa-hand-holding-heart card-icon"></i>
 
@@ -146,7 +146,7 @@
 
         </div>
 
-        <div class="card">
+        <div class="card" onclick="filterItems('All')">
 
             <i class="fa-solid fa-filter card-icon"></i>
 
@@ -159,7 +159,7 @@
 
         </div>
 
-        <div class="card">
+        <div class="card" onclick="showSection('report')">
 
             <i class="fa-solid fa-shield-halved card-icon"></i>
 
@@ -176,7 +176,7 @@
 
 </section>
 
-<!-- REPORT -->
+<!-- REPORT SECTION -->
 
 <section id="report">
 
@@ -281,7 +281,7 @@
 
 </section>
 
-<!-- SEARCH -->
+<!-- SEARCH SECTION -->
 
 <section id="search">
 
@@ -310,7 +310,7 @@
 
 </section>
 
-<!-- ADMIN -->
+<!-- ADMIN SECTION -->
 
 <section id="admin">
 

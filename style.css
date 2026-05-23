@@ -125,6 +125,13 @@ button:hover{
     text-align: center;
     border-radius: 18px;
     box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.stat-card:hover{
+    transform: translateY(-6px);
+    background: #f8fafc;
 }
 
 .stat-card h3{
@@ -150,6 +157,7 @@ button:hover{
     padding: 25px;
     border-radius: 18px;
     box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    cursor: pointer;
 }
 
 .card-icon{
@@ -258,6 +266,29 @@ textarea{
     margin-bottom: 10px;
     font-size: 13px;
     font-weight: bold;
+}
+
+.admin-heading{
+    grid-column: 1 / -1;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    color: #1d4ed8;
+    border-left: 6px solid #0f766e;
+    padding-left: 12px;
+}
+
+.empty-message{
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    grid-column: 1 / -1;
+}
+
+.empty-message h3{
+    color: #1d4ed8;
+    margin-bottom: 10px;
 }
 
 .card,

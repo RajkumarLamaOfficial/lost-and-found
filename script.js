@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
             description: document.getElementById("description").value,
             contact: document.getElementById("contact").value,
             image: imageData,
-            status: "Pending"
+            status: "Pending",
             verification: document.getElementById("verification").value,
         };
 

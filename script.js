@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
             description: "Lost near study area.",
             contact: "student@kdu.ac.kr",
             image: "",
-            status: "Pending"
+            status: "Pending",
+            verification: "What name is written on the ID card?"
         },
         {
             type: "Found",
@@ -19,7 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
             description: "Found near cafeteria counter.",
             contact: "finder@kdu.ac.kr",
             image: "",
-            status: "Pending"
+            status: "Pending",
+            verification: "What color/design is inside the wallet?"
         }
     ];
 
@@ -41,26 +43,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const itemForm = document.getElementById("itemForm");
 
-    if (itemForm) {
-        itemForm.addEventListener("submit", function (e) {
-            e.preventDefault();
+    itemForm.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-            const imageInput = document.getElementById("itemImage");
-            const imageFile = imageInput.files[0];
+        const imageInput = document.getElementById("itemImage");
+        const imageFile = imageInput.files[0];
 
-            if (imageFile) {
-                const reader = new FileReader();
+        if (imageFile) {
+            const reader = new FileReader();
 
-                reader.onload = function () {
-                    saveItem(reader.result);
-                };
+            reader.onload = function () {
+                saveItem(reader.result);
+            };
 
-                reader.readAsDataURL(imageFile);
-            } else {
-                saveItem("");
-            }
-        });
-    }
+            reader.readAsDataURL(imageFile);
+        } else {
+            saveItem("");
+        }
+    });
 
     function saveItem(imageData) {
         const newItem = {
@@ -72,14 +72,17 @@ document.addEventListener("DOMContentLoaded", function () {
             contact: document.getElementById("contact").value,
             image: imageData,
             status: "Pending",
-            verification: document.getElementById("verification").value,
+            verification: document.getElementById("verification").value
         };
 
         const items = JSON.parse(localStorage.getItem("items")) || [];
+
         items.push(newItem);
+
         localStorage.setItem("items", JSON.stringify(items));
 
         alert("Report submitted successfully!");
+
         itemForm.reset();
 
         showSection("search");
@@ -88,9 +91,6 @@ document.addEventListener("DOMContentLoaded", function () {
     window.displayItems = function () {
         const itemList = document.getElementById("itemList");
         const searchInput = document.getElementById("searchInput");
-        
-
-        if (!itemList) return;
 
         const searchValue = searchInput ? searchInput.value.toLowerCase() : "";
 
@@ -106,9 +106,12 @@ document.addEventListener("DOMContentLoaded", function () {
         itemList.innerHTML = filteredItems.map(item => `
             <div class="item-card">
                 ${item.image ? `<img src="${item.image}" class="item-image" alt="Item Image">` : ""}
+
                 <span class="badge">${item.type}</span>
                 <span class="status">${item.status || "Pending"}</span>
+
                 <h3>${item.itemName}</h3>
+
                 <p><strong>Category:</strong> ${item.category}</p>
                 <p><strong>Location:</strong> ${item.location}</p>
                 <p><strong>Description:</strong> ${item.description}</p>
@@ -120,23 +123,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.displayAdminItems = function () {
         const adminList = document.getElementById("adminList");
-        
-
-        if (!adminList) return;
 
         const items = JSON.parse(localStorage.getItem("items")) || [];
 
         adminList.innerHTML = items.map((item, index) => `
             <div class="item-card">
                 ${item.image ? `<img src="${item.image}" class="item-image" alt="Item Image">` : ""}
+
                 <span class="badge">${item.type}</span>
+
                 <h3>${item.itemName}</h3>
+
                 <p><strong>Category:</strong> ${item.category}</p>
                 <p><strong>Location:</strong> ${item.location}</p>
                 <p><strong>Status:</strong> ${item.status || "Pending"}</p>
                 <p><strong>Claim Verification:</strong> ${item.verification || "Not provided"}</p>
 
                 <label>Update Status</label>
+
                 <select onchange="updateStatus(${index}, this.value)">
                     <option value="Pending" ${(item.status || "Pending") === "Pending" ? "selected" : ""}>Pending</option>
                     <option value="Approved" ${item.status === "Approved" ? "selected" : ""}>Approved</option>
@@ -144,7 +148,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     <option value="Returned" ${item.status === "Returned" ? "selected" : ""}>Returned</option>
                 </select>
 
-                <button onclick="deleteItem(${index})">Delete</button>
+                <button onclick="deleteItem(${index})">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </button>
             </div>
         `).join("");
     };
@@ -172,19 +178,15 @@ document.addEventListener("DOMContentLoaded", function () {
         displayAdminItems();
         updateStats();
     };
+
     function updateStats() {
         const items = JSON.parse(localStorage.getItem("items")) || [];
 
-        const totalReports = items.length;
-        const lostReports = items.filter(item => item.type === "Lost").length;
-        const foundReports = items.filter(item => item.type === "Found").length;
-        const returnedReports = items.filter(item => item.status === "Returned").length;
-
-        document.getElementById("totalReports").textContent = totalReports;
-        document.getElementById("lostReports").textContent = lostReports;
-        document.getElementById("foundReports").textContent = foundReports;
-        document.getElementById("returnedReports").textContent = returnedReports;
-}
+        document.getElementById("totalReports").textContent = items.length;
+        document.getElementById("lostReports").textContent = items.filter(item => item.type === "Lost").length;
+        document.getElementById("foundReports").textContent = items.filter(item => item.type === "Found").length;
+        document.getElementById("returnedReports").textContent = items.filter(item => item.status === "Returned").length;
+    }
 
     displayItems();
     displayAdminItems();

@@ -1,163 +1,124 @@
-const sampleItems = [
+document.addEventListener("DOMContentLoaded", function () {
 
-    {
-        type: "Lost",
-        itemName: "Student ID Card",
-        category: "ID Card",
-        location: "Library",
-        description: "Lost near study area.",
-        contact: "student@kdu.ac.kr"
-    },
+    const sampleItems = [
+        {
+            type: "Lost",
+            itemName: "Student ID Card",
+            category: "ID Card",
+            location: "Library",
+            description: "Lost near study area.",
+            contact: "student@kdu.ac.kr"
+        },
+        {
+            type: "Found",
+            itemName: "Black Wallet",
+            category: "Wallet",
+            location: "Cafeteria",
+            description: "Found near cafeteria counter.",
+            contact: "finder@kdu.ac.kr"
+        }
+    ];
 
-    {
-        type: "Found",
-        itemName: "Black Wallet",
-        category: "Wallet",
-        location: "Cafeteria",
-        description: "Found near cafeteria counter.",
-        contact: "finder@kdu.ac.kr"
+    if (!localStorage.getItem("items")) {
+        localStorage.setItem("items", JSON.stringify(sampleItems));
     }
 
-];
+    window.showSection = function (sectionId) {
+        document.querySelectorAll("section").forEach(section => {
+            section.classList.remove("active");
+        });
 
-if(!localStorage.getItem("items")){
+        document.getElementById(sectionId).classList.add("active");
 
-    localStorage.setItem("items", JSON.stringify(sampleItems));
-
-}
-
-/* SECTION NAVIGATION */
-
-function showSection(sectionId){
-
-    document.querySelectorAll("section").forEach(section => {
-
-        section.classList.remove("active");
-
-    });
-
-    document.getElementById(sectionId).classList.add("active");
-
-    displayItems();
-    displayAdminItems();
-
-}
-
-/* FORM SUBMISSION */
-
-document.getElementById("itemForm").addEventListener("submit", function(e){
-
-    e.preventDefault();
-
-    const newItem = {
-
-        type: document.getElementById("type").value,
-        itemName: document.getElementById("itemName").value,
-        category: document.getElementById("category").value,
-        location: document.getElementById("location").value,
-        description: document.getElementById("description").value,
-        contact: document.getElementById("contact").value
-
+        displayItems();
+        displayAdminItems();
     };
 
-    const items = JSON.parse(localStorage.getItem("items")) || [];
+    const itemForm = document.getElementById("itemForm");
 
-    items.push(newItem);
+    if (itemForm) {
+        itemForm.addEventListener("submit", function (e) {
+            e.preventDefault();
 
-    localStorage.setItem("items", JSON.stringify(items));
+            const newItem = {
+                type: document.getElementById("type").value,
+                itemName: document.getElementById("itemName").value,
+                category: document.getElementById("category").value,
+                location: document.getElementById("location").value,
+                description: document.getElementById("description").value,
+                contact: document.getElementById("contact").value
+            };
 
-    alert("Report submitted successfully!");
+            const items = JSON.parse(localStorage.getItem("items")) || [];
+            items.push(newItem);
+            localStorage.setItem("items", JSON.stringify(items));
 
-    document.getElementById("itemForm").reset();
+            alert("Report submitted successfully!");
+            itemForm.reset();
 
-    showSection("search");
+            showSection("search");
+        });
+    }
 
-});
+    window.displayItems = function () {
+        const itemList = document.getElementById("itemList");
+        const searchInput = document.getElementById("searchInput");
 
-/* DISPLAY ITEMS */
+        if (!itemList) return;
 
-function displayItems(){
+        const searchValue = searchInput ? searchInput.value.toLowerCase() : "";
 
-    const itemList = document.getElementById("itemList");
+        const items = JSON.parse(localStorage.getItem("items")) || [];
 
-    const searchValue = document.getElementById("searchInput").value.toLowerCase();
+        const filteredItems = items.filter(item =>
+            item.itemName.toLowerCase().includes(searchValue) ||
+            item.category.toLowerCase().includes(searchValue) ||
+            item.location.toLowerCase().includes(searchValue) ||
+            item.description.toLowerCase().includes(searchValue)
+        );
 
-    const items = JSON.parse(localStorage.getItem("items")) || [];
+        itemList.innerHTML = filteredItems.map(item => `
+            <div class="item-card">
+                <span class="badge">${item.type}</span>
+                <h3>${item.itemName}</h3>
+                <p><strong>Category:</strong> ${item.category}</p>
+                <p><strong>Location:</strong> ${item.location}</p>
+                <p><strong>Description:</strong> ${item.description}</p>
+                <p><strong>Contact:</strong> ${item.contact}</p>
+            </div>
+        `).join("");
+    };
 
-    const filteredItems = items.filter(item =>
+    window.displayAdminItems = function () {
+        const adminList = document.getElementById("adminList");
 
-        item.itemName.toLowerCase().includes(searchValue) ||
-        item.category.toLowerCase().includes(searchValue) ||
-        item.location.toLowerCase().includes(searchValue)
+        if (!adminList) return;
 
-    );
+        const items = JSON.parse(localStorage.getItem("items")) || [];
 
-    itemList.innerHTML = filteredItems.map(item => `
+        adminList.innerHTML = items.map((item, index) => `
+            <div class="item-card">
+                <span class="badge">${item.type}</span>
+                <h3>${item.itemName}</h3>
+                <p><strong>Category:</strong> ${item.category}</p>
+                <p><strong>Location:</strong> ${item.location}</p>
+                <button onclick="deleteItem(${index})">Delete</button>
+            </div>
+        `).join("");
+    };
 
-        <div class="item-card">
+    window.deleteItem = function (index) {
+        const items = JSON.parse(localStorage.getItem("items")) || [];
 
-            <span class="badge">${item.type}</span>
+        items.splice(index, 1);
 
-            <h3>${item.itemName}</h3>
+        localStorage.setItem("items", JSON.stringify(items));
 
-            <p><strong>Category:</strong> ${item.category}</p>
-
-            <p><strong>Location:</strong> ${item.location}</p>
-
-            <p><strong>Description:</strong> ${item.description}</p>
-
-            <p><strong>Contact:</strong> ${item.contact}</p>
-
-        </div>
-
-    `).join("");
-
-}
-
-/* ADMIN PANEL */
-
-function displayAdminItems(){
-
-    const adminList = document.getElementById("adminList");
-
-    const items = JSON.parse(localStorage.getItem("items")) || [];
-
-    adminList.innerHTML = items.map((item,index) => `
-
-        <div class="item-card">
-
-            <span class="badge">${item.type}</span>
-
-            <h3>${item.itemName}</h3>
-
-            <p><strong>Category:</strong> ${item.category}</p>
-
-            <p><strong>Location:</strong> ${item.location}</p>
-
-            <button onclick="deleteItem(${index})">Delete</button>
-
-        </div>
-
-    `).join("");
-
-}
-
-/* DELETE ITEM */
-
-function deleteItem(index){
-
-    const items = JSON.parse(localStorage.getItem("items")) || [];
-
-    items.splice(index,1);
-
-    localStorage.setItem("items", JSON.stringify(items));
+        displayItems();
+        displayAdminItems();
+    };
 
     displayItems();
-
     displayAdminItems();
 
-}
-
-displayItems();
-
-displayAdminItems();
+});

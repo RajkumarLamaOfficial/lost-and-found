@@ -232,6 +232,40 @@ footer{
     font-weight: bold;
 }
 
+/* STATS */
+
+.stats{
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.stat-card{
+    background: white;
+    padding: 25px;
+    text-align: center;
+    border-radius: 18px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.stat-card:hover{
+    transform: translateY(-6px);
+}
+
+.stat-card h3{
+    font-size: 34px;
+    color: #1d4ed8;
+    margin-bottom: 8px;
+}
+
+.stat-card p{
+    font-weight: bold;
+    color: #374151;
+}
+
+
 
 /* RESPONSIVE */
 

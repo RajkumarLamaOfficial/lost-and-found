@@ -10,7 +10,6 @@
 </head>
 <body>
 
-<!-- LOGIN / SIGNUP PAGE -->
 <section id="authPage" class="auth-page active-page">
     <div class="auth-card">
         <div class="auth-left">
@@ -37,7 +36,6 @@
     </div>
 </section>
 
-<!-- MAIN WEBSITE -->
 <div id="mainApp" class="hidden">
 
 <header>
@@ -47,14 +45,11 @@
 
 <nav>
     <a onclick="showSection('home')"><i class="fa-solid fa-house"></i> Home</a>
-    <a onclick="showSection('myReports')"><i class="fa-solid fa-folder-open"></i> My Report</a>
+    <a onclick="showSection('myReports')"><i class="fa-solid fa-folder-open"></i> My Report <span id="notificationBadge" class="notification-badge hidden">0</span></a>
     <a onclick="showSection('profile')"><i class="fa-solid fa-user"></i> About Me</a>
-    <a onclick="showSection('report')"><i class="fa-solid fa-circle-plus"></i> Report Item</a>
-    <a onclick="filterItems('All')"><i class="fa-solid fa-magnifying-glass"></i> Search Items</a>
     <a onclick="logoutUser()" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
 </nav>
 
-<!-- HOME -->
 <div id="home" class="page active-section">
     <div class="hero">
         <h2>Welcome, <span id="welcomeName">Student</span></h2>
@@ -91,26 +86,28 @@
         </div>
     </div>
 
+    <h2 class="section-heading">What You Can Do</h2>
+
     <div class="cards">
-        <div class="card" onclick="showSection('report')">
+        <div class="card">
             <i class="fa-solid fa-bullhorn card-icon"></i>
             <h3>Report Lost Item</h3>
             <p>Submit information about an item you lost on campus.</p>
         </div>
 
-        <div class="card" onclick="showSection('report')">
+        <div class="card">
             <i class="fa-solid fa-hand-holding-heart card-icon"></i>
             <h3>Report Found Item</h3>
             <p>Post found items so the real owner can identify and claim them.</p>
         </div>
 
-        <div class="card" onclick="filterItems('All')">
+        <div class="card">
             <i class="fa-solid fa-filter card-icon"></i>
             <h3>Search Items</h3>
             <p>Search lost and found reports using keywords and categories.</p>
         </div>
 
-        <div class="card" onclick="showSection('myReports')">
+        <div class="card">
             <i class="fa-solid fa-comments card-icon"></i>
             <h3>Private Responses</h3>
             <p>View private responses from students on your own reports.</p>
@@ -118,7 +115,6 @@
     </div>
 </div>
 
-<!-- REPORT ITEM -->
 <div id="report" class="page">
     <div class="form-box">
         <h2>Report Lost or Found Item</h2>
@@ -163,11 +159,16 @@
     </div>
 </div>
 
-<!-- SEARCH ITEMS -->
 <div id="search" class="page">
     <div class="hero">
-        <h2 id="searchTitle">Search Reported Items</h2>
+        <h2 id="searchTitle">All Lost and Found Reports</h2>
         <p>Search lost and found items reported by students.</p>
+    </div>
+
+    <div class="filter-panel">
+        <button onclick="filterItems('All')" class="filter-btn">Both Lost and Found</button>
+        <button onclick="filterItems('Lost')" class="filter-btn">Lost Items Only</button>
+        <button onclick="filterItems('Found')" class="filter-btn">Found Items Only</button>
     </div>
 
     <div class="search-box">
@@ -177,17 +178,15 @@
     <div id="itemList" class="item-list"></div>
 </div>
 
-<!-- MY REPORTS -->
 <div id="myReports" class="page">
     <div class="hero">
         <h2>My Reports</h2>
-        <p>Manage your own lost and found reports, view private responses, and delete reports if needed.</p>
+        <p>Manage your own reports, view private responses, reply back, and delete reports if needed.</p>
     </div>
 
     <div id="myReportList" class="item-list"></div>
 </div>
 
-<!-- PROFILE -->
 <div id="profile" class="page">
     <div class="profile-box">
         <h2>About Me</h2>

@@ -184,6 +184,12 @@
         <p>Manage your own reports, view private responses, reply back, and delete reports if needed.</p>
     </div>
 
+    <div class="filter-panel">
+        <button onclick="filterMyReports('All')" class="filter-btn">Both Lost and Found Reports</button>
+        <button onclick="filterMyReports('Lost')" class="filter-btn">My Lost Item Reports</button>
+        <button onclick="filterMyReports('Found')" class="filter-btn">My Found Item Reports</button>
+    </div>
+
     <div id="myReportList" class="item-list"></div>
 </div>
 

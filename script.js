@@ -64,6 +64,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            if (!user.seenChats) {
+                user.seenChats = [];
+            }
+
             currentUser = user;
             localStorage.setItem("currentUser", JSON.stringify(user));
             openMainApp();
@@ -134,7 +138,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (sectionId === "myReports") {
-            markMessagesAsSeen();
             displayMyReports();
         }
 
@@ -285,13 +288,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 <p><strong>Posted:</strong> ${item.createdAt}</p>
                 <p><strong>Verification:</strong> ${item.verification || "Not provided"}</p>
 
-                ${item.type === "Found" && !isOwner
-                    ? createClaimBox(item)
-                    : ""}
+                ${item.type === "Found" && !isOwner ? createClaimBox(item) : ""}
 
-                ${!isOwner
-                    ? createChatSection(item, hasClaimed)
-                    : ""}
+                ${!isOwner ? createChatSection(item, hasClaimed) : ""}
             </div>
         `;
     }
@@ -319,6 +318,25 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
     }
 
+    function createClaimsOnlyBox(item) {
+        return `
+            <div class="claim-box">
+                <h4>Public Claims</h4>
+
+                ${item.claims.length === 0
+                    ? `<p>No public claims yet.</p>`
+                    : item.claims.map(claim => `
+                        <div class="claim-message">
+                            <p><strong>${claim.name}</strong></p>
+                            <p>${claim.contact}</p>
+                            <p>${claim.date}</p>
+                        </div>
+                    `).join("")
+                }
+            </div>
+        `;
+    }
+
     window.claimItem = function (itemId) {
         const name = prompt("Enter your name:");
 
@@ -331,6 +349,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const items = JSON.parse(localStorage.getItem("items")) || [];
 
         const item = items.find(i => i.id === itemId);
+
+        if (item.ownerId === currentUser.id) {
+            alert("You cannot claim your own report.");
+            return;
+        }
 
         const alreadyClaimed = item.claims.some(
             claim => claim.userId === currentUser.id
@@ -353,9 +376,14 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("Claim submitted publicly.");
 
         displayItems();
+        displayMyReports();
     };
 
     function createChatSection(item, hasClaimed) {
+        if (item.ownerId === currentUser.id) {
+            return "";
+        }
+
         if (item.type === "Found" && !hasClaimed) {
             return `
                 <div class="response-box">
@@ -405,6 +433,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const items = JSON.parse(localStorage.getItem("items")) || [];
         const item = items.find(i => i.id === itemId);
+
+        if (item.ownerId === currentUser.id) {
+            alert("You cannot respond to your own report.");
+            return;
+        }
 
         item.chats.push({
             id: Date.now(),
@@ -554,6 +587,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function createMyReportCard(item) {
         const conversationsByUser = getConversationsGroupedByUser(item);
+        const hasUnread = hasUnreadMessages(item);
 
         return `
             <div class="item-card">
@@ -561,6 +595,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <span class="badge">${item.type}</span>
                 <span class="owner-badge">Your Report</span>
+
+                ${hasUnread ? `<span class="notification-badge">New Response</span>` : ""}
 
                 <h3>${item.itemName}</h3>
 
@@ -595,8 +631,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 </div>
 
-                ${item.type === "Found" && !isOwner ? createClaimBox(item) : ""}
-                
+                ${item.type === "Found" ? createClaimsOnlyBox(item) : ""}
+
                 <button onclick="deleteReport(${item.id})" class="danger-btn">
                     <i class="fa-solid fa-trash"></i> Delete Report
                 </button>
@@ -737,7 +773,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     ...user,
                     name,
                     contact,
-                    profileImage: image
+                    profileImage: image,
+                    seenChats: currentUser.seenChats || []
                 };
             }
 
@@ -804,7 +841,22 @@ document.addEventListener("DOMContentLoaded", function () {
             badge.classList.add("hidden");
         }
 
-        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        saveCurrentUserToUsers();
+    }
+
+    function hasUnreadMessages(item) {
+        if (!currentUser.seenChats) {
+            currentUser.seenChats = [];
+        }
+
+        return item.chats.some(chat =>
+            chat.fromUserId !== currentUser.id &&
+            (
+                chat.toUserId === currentUser.id ||
+                item.ownerId === currentUser.id
+            ) &&
+            !currentUser.seenChats.includes(chat.id)
+        );
     }
 
     function markMessagesAsSeen() {
@@ -833,6 +885,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
+        saveCurrentUserToUsers();
+    }
+
+    function saveCurrentUserToUsers() {
         let users = JSON.parse(localStorage.getItem("users")) || [];
 
         users = users.map(user => {
@@ -844,6 +900,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         localStorage.setItem("users", JSON.stringify(users));
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
     }
 
 });

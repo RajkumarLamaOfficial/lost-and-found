@@ -6,339 +6,217 @@
     <title>KDU Smart Lost & Found System</title>
 
     <link rel="stylesheet" href="style.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-
 <body>
+
+<!-- LOGIN / SIGNUP PAGE -->
+<section id="authPage" class="auth-page active-page">
+    <div class="auth-card">
+        <div class="auth-left">
+            <h1>KDU Smart Lost & Found</h1>
+            <p>A student-based smart campus platform for reporting, searching, claiming, and recovering lost items.</p>
+            <i class="fa-solid fa-box-open auth-icon"></i>
+        </div>
+
+        <div class="auth-right">
+            <h2 id="authTitle">Login</h2>
+
+            <input type="text" id="authName" placeholder="Full Name" class="signup-only hidden">
+            <input type="text" id="authContact" placeholder="Contact Number" class="signup-only hidden">
+            <input type="email" id="authEmail" placeholder="Email">
+            <input type="password" id="authPassword" placeholder="Password">
+
+            <button onclick="handleAuth()" id="authButton">Login</button>
+
+            <p class="switch-auth">
+                <span id="switchText">Don’t have an account?</span>
+                <a onclick="toggleAuthMode()">Sign up</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- MAIN WEBSITE -->
+<section id="mainApp" class="hidden">
 
 <header>
     <h1>KDU Smart Lost & Found System</h1>
-
-    <p>
-        A smart campus solution for reporting and recovering lost items.
-    </p>
+    <p>Report, search, respond, and claim lost or found items inside KDU Global Campus.</p>
 </header>
 
 <nav>
-
-    <a onclick="showSection('home')">
-        <i class="fa-solid fa-house"></i> Home
-    </a>
-
-    <a onclick="showSection('report')">
-        <i class="fa-solid fa-circle-plus"></i> Report Item
-    </a>
-
-    <a onclick="showSection('search')">
-        <i class="fa-solid fa-magnifying-glass"></i> Search Items
-    </a>
-
-    <a onclick="showSection('admin')">
-        <i class="fa-solid fa-user-shield"></i> Admin Panel
-    </a>
-
+    <a onclick="showSection('home')"><i class="fa-solid fa-house"></i> Home</a>
+    <a onclick="showSection('myReports')"><i class="fa-solid fa-folder-open"></i> My Report</a>
+    <a onclick="showSection('profile')"><i class="fa-solid fa-user"></i> About Me</a>
+    <a onclick="showSection('report')"><i class="fa-solid fa-circle-plus"></i> Report Item</a>
+    <a onclick="filterItems('All')"><i class="fa-solid fa-magnifying-glass"></i> Search Items</a>
+    <a onclick="logoutUser()" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
 </nav>
 
-<!-- HOME SECTION -->
-
-<section id="home" class="active">
-
+<!-- HOME -->
+<div id="home" class="page active-section">
     <div class="hero">
-
-        <h2>
-            Building a Smarter Lost-and-Found System for KDU
-        </h2>
-
+        <h2>Welcome, <span id="welcomeName">Student</span></h2>
         <p>
-            This system helps students report lost or found items,
-            search reported items, and recover belongings through
-            a centralized online platform.
+            This platform helps students report lost and found items, search available reports,
+            send private responses, and publicly claim found items.
         </p>
 
         <div class="hero-buttons">
-
             <button onclick="showSection('report')">
-
-                <i class="fa-solid fa-plus"></i>
-
-                Report Item
-
+                <i class="fa-solid fa-plus"></i> Report Item
             </button>
 
             <button onclick="filterItems('All')" class="secondary-btn">
-
-                <i class="fa-solid fa-search"></i>
-
-                Search Items
-
+                <i class="fa-solid fa-search"></i> Search Items
             </button>
-
         </div>
-
     </div>
 
-    <!-- DASHBOARD STATS -->
-
     <div class="stats">
-
         <div class="stat-card" onclick="filterItems('All')">
-
             <h3 id="totalReports">0</h3>
-
             <p>Total Reports</p>
-
         </div>
 
         <div class="stat-card" onclick="filterItems('Lost')">
-
             <h3 id="lostReports">0</h3>
-
             <p>Lost Items</p>
-
         </div>
 
         <div class="stat-card" onclick="filterItems('Found')">
-
             <h3 id="foundReports">0</h3>
-
             <p>Found Items</p>
-
         </div>
-
-        <div class="stat-card" onclick="filterItems('Returned')">
-
-            <h3 id="returnedReports">0</h3>
-
-            <p>Returned Items</p>
-
-        </div>
-
     </div>
 
-    <!-- FEATURE CARDS -->
-
     <div class="cards">
-
         <div class="card" onclick="showSection('report')">
-
             <i class="fa-solid fa-bullhorn card-icon"></i>
-
-            <h3>Report Lost Items</h3>
-
-            <p>
-                Students can report items they lost on campus
-                with details and images.
-            </p>
-
+            <h3>Report Lost Item</h3>
+            <p>Submit information about an item you lost on campus.</p>
         </div>
 
         <div class="card" onclick="showSection('report')">
-
             <i class="fa-solid fa-hand-holding-heart card-icon"></i>
-
-            <h3>Report Found Items</h3>
-
-            <p>
-                Students can upload found items so the real owner
-                can identify them.
-            </p>
-
+            <h3>Report Found Item</h3>
+            <p>Post found items so the real owner can identify and claim them.</p>
         </div>
 
         <div class="card" onclick="filterItems('All')">
-
             <i class="fa-solid fa-filter card-icon"></i>
-
-            <h3>Search and Filter</h3>
-
-            <p>
-                Users can search by item name, category,
-                location, or description.
-            </p>
-
+            <h3>Search Items</h3>
+            <p>Search lost and found reports using keywords and categories.</p>
         </div>
 
-        <div class="card" onclick="showSection('report')">
-
-            <i class="fa-solid fa-shield-halved card-icon"></i>
-
-            <h3>Claim Verification</h3>
-
-            <p>
-                Claim questions help reduce fake claims
-                and protect item owners.
-            </p>
-
+        <div class="card" onclick="showSection('myReports')">
+            <i class="fa-solid fa-comments card-icon"></i>
+            <h3>Private Responses</h3>
+            <p>View private responses from students on your own reports.</p>
         </div>
-
     </div>
+</div>
 
-</section>
-
-<!-- REPORT SECTION -->
-
-<section id="report">
-
+<!-- REPORT ITEM -->
+<div id="report" class="page">
     <div class="form-box">
-
         <h2>Report Lost or Found Item</h2>
 
         <form id="itemForm">
-
             <label>Report Type</label>
-
             <select id="type" required>
-
                 <option value="Lost">Lost Item</option>
-
                 <option value="Found">Found Item</option>
-
             </select>
 
             <label>Item Name</label>
-
-            <input
-                type="text"
-                id="itemName"
-                placeholder="Example: Student ID Card"
-                required
-            >
+            <input type="text" id="itemName" placeholder="Example: Student ID Card" required>
 
             <label>Category</label>
-
             <select id="category" required>
-
                 <option>ID Card</option>
-
                 <option>Electronics</option>
-
                 <option>Wallet</option>
-
                 <option>Keys</option>
-
                 <option>Books</option>
-
                 <option>Clothing</option>
-
                 <option>Other</option>
-
             </select>
 
             <label>Location</label>
-
-            <input
-                type="text"
-                id="location"
-                placeholder="Example: Library, Cafeteria"
-                required
-            >
+            <input type="text" id="location" placeholder="Example: Library, Cafeteria" required>
 
             <label>Description</label>
-
-            <textarea
-                id="description"
-                placeholder="Describe the item clearly..."
-                required
-            ></textarea>
+            <textarea id="description" placeholder="Describe the item clearly..." required></textarea>
 
             <label>Item Image</label>
-
-            <input
-                type="file"
-                id="itemImage"
-                accept="image/*"
-            >
-
-            <label>Contact Information</label>
-
-            <input
-                type="text"
-                id="contact"
-                placeholder="Email or phone number"
-                required
-            >
+            <input type="file" id="itemImage" accept="image/*">
 
             <label>Claim Verification Question</label>
-
-            <input
-                type="text"
-                id="verification"
-                placeholder="Example: What color is the wallet?"
-            >
+            <input type="text" id="verification" placeholder="Example: What color is the wallet?">
 
             <button type="submit">
-
-                <i class="fa-solid fa-paper-plane"></i>
-
-                Submit Report
-
+                <i class="fa-solid fa-paper-plane"></i> Submit Report
             </button>
-
         </form>
-
     </div>
+</div>
 
-</section>
-
-<!-- SEARCH SECTION -->
-
-<section id="search">
-
+<!-- SEARCH ITEMS -->
+<div id="search" class="page">
     <div class="hero">
-
-        <h2>Search Reported Items</h2>
-
-        <p>
-            Find lost or found items using keywords.
-        </p>
-
+        <h2 id="searchTitle">Search Reported Items</h2>
+        <p>Search lost and found items reported by students.</p>
     </div>
 
     <div class="search-box">
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search by item, category, location..."
-            oninput="displayItems()"
-        >
-
+        <input type="text" id="searchInput" placeholder="Search by item, category, location..." oninput="displayItems()">
     </div>
 
     <div id="itemList" class="item-list"></div>
+</div>
 
-</section>
-
-<!-- ADMIN SECTION -->
-
-<section id="admin">
-
+<!-- MY REPORTS -->
+<div id="myReports" class="page">
     <div class="hero">
-
-        <h2>Admin Panel</h2>
-
-        <p>
-            University staff can monitor and manage reports.
-        </p>
-
+        <h2>My Reports</h2>
+        <p>Manage your own lost and found reports, view private responses, and delete reports if needed.</p>
     </div>
 
-    <div id="adminList" class="item-list"></div>
+    <div id="myReportList" class="item-list"></div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="page">
+    <div class="profile-box">
+        <h2>About Me</h2>
+
+        <div class="profile-preview">
+            <img id="profileImagePreview" src="" alt="Profile Picture">
+        </div>
+
+        <label>Profile Picture</label>
+        <input type="file" id="profileImage" accept="image/*">
+
+        <label>Name</label>
+        <input type="text" id="profileName">
+
+        <label>Contact Information</label>
+        <input type="text" id="profileContact">
+
+        <button onclick="saveProfile()">
+            <i class="fa-solid fa-floppy-disk"></i> Save Profile
+        </button>
+    </div>
+</div>
+
+<footer>
+    <p>Developed for KDU Global Campus Research Project</p>
+</footer>
 
 </section>
 
-<!-- FOOTER -->
-
-<footer>
-
-    <p>
-        Developed for KDU Global Campus Research Project
-    </p>
-
-</footer>
-
 <script src="script.js"></script>
-
 </body>
 </html>

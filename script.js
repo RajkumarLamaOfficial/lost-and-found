@@ -4,10 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentFilter = "All";
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-    const defaultProfileImage =
-        "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-
-    /* INITIAL SETUP */
+    const defaultProfileImage = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
 
     if (!localStorage.getItem("users")) {
         localStorage.setItem("users", JSON.stringify([]));
@@ -17,19 +14,12 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("items", JSON.stringify([]));
     }
 
-    if (currentUser) {
-        openMainApp();
-    }
-
-    /* AUTH SYSTEM */
-
     window.toggleAuthMode = function () {
         isLoginMode = !isLoginMode;
 
         document.getElementById("authTitle").textContent = isLoginMode ? "Login" : "Sign Up";
         document.getElementById("authButton").textContent = isLoginMode ? "Login" : "Create Account";
         document.getElementById("switchText").textContent = isLoginMode ? "Don’t have an account?" : "Already have an account?";
-
         document.querySelector(".switch-auth a").textContent = isLoginMode ? "Sign up" : "Login";
 
         document.querySelectorAll(".signup-only").forEach(input => {
@@ -58,8 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            localStorage.setItem("currentUser", JSON.stringify(user));
             currentUser = user;
+            localStorage.setItem("currentUser", JSON.stringify(user));
             openMainApp();
         } else {
             if (!name || !contact) {
@@ -70,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const existingUser = users.find(u => u.email === email);
 
             if (existingUser) {
-                alert("An account with this email already exists.");
+                alert("This email already has an account.");
                 return;
             }
 
@@ -89,7 +79,6 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.setItem("currentUser", JSON.stringify(newUser));
 
             currentUser = newUser;
-
             openMainApp();
         }
     };
@@ -98,7 +87,10 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("authPage").classList.add("hidden");
         document.getElementById("mainApp").classList.remove("hidden");
 
-        document.getElementById("welcomeName").textContent = currentUser.name;
+        const welcomeName = document.getElementById("welcomeName");
+        if (welcomeName) {
+            welcomeName.textContent = currentUser.name;
+        }
 
         loadProfile();
         showSection("home");
@@ -110,14 +102,16 @@ document.addEventListener("DOMContentLoaded", function () {
         location.reload();
     };
 
-    /* PAGE NAVIGATION */
-
     window.showSection = function (sectionId) {
         document.querySelectorAll(".page").forEach(page => {
             page.classList.remove("active-section");
         });
 
-        document.getElementById(sectionId).classList.add("active-section");
+        const selectedPage = document.getElementById(sectionId);
+
+        if (selectedPage) {
+            selectedPage.classList.add("active-section");
+        }
 
         if (sectionId === "search") {
             displayItems();
@@ -140,39 +134,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const searchTitle = document.getElementById("searchTitle");
 
-        if (filterType === "All") {
-            searchTitle.textContent = "All Lost and Found Reports";
-        } else if (filterType === "Lost") {
-            searchTitle.textContent = "Lost Item Reports";
-        } else if (filterType === "Found") {
-            searchTitle.textContent = "Found Item Reports";
+        if (searchTitle) {
+            if (filterType === "All") {
+                searchTitle.textContent = "All Lost and Found Reports";
+            } else if (filterType === "Lost") {
+                searchTitle.textContent = "Lost Item Reports";
+            } else if (filterType === "Found") {
+                searchTitle.textContent = "Found Item Reports";
+            }
         }
 
         displayItems();
     };
 
-    /* REPORT ITEM */
-
     const itemForm = document.getElementById("itemForm");
 
-    itemForm.addEventListener("submit", function (e) {
-        e.preventDefault();
+    if (itemForm) {
+        itemForm.addEventListener("submit", function (e) {
+            e.preventDefault();
 
-        const imageInput = document.getElementById("itemImage");
-        const imageFile = imageInput.files[0];
+            const imageInput = document.getElementById("itemImage");
+            const imageFile = imageInput.files[0];
 
-        if (imageFile) {
-            const reader = new FileReader();
+            if (imageFile) {
+                const reader = new FileReader();
 
-            reader.onload = function () {
-                saveItem(reader.result);
-            };
+                reader.onload = function () {
+                    saveItem(reader.result);
+                };
 
-            reader.readAsDataURL(imageFile);
-        } else {
-            saveItem("");
-        }
-    });
+                reader.readAsDataURL(imageFile);
+            } else {
+                saveItem("");
+            }
+        });
+    }
 
     function saveItem(imageData) {
         const newItem = {
@@ -207,11 +203,11 @@ document.addEventListener("DOMContentLoaded", function () {
         showSection("search");
     }
 
-    /* SEARCH ITEMS */
-
     window.displayItems = function () {
         const itemList = document.getElementById("itemList");
         const searchInput = document.getElementById("searchInput");
+
+        if (!itemList) return;
 
         const searchValue = searchInput ? searchInput.value.toLowerCase() : "";
 
@@ -245,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     function createPublicItemCard(item) {
-        const isOwner = item.ownerId === currentUser.id;
+        const isOwner = currentUser && item.ownerId === currentUser.id;
 
         return `
             <div class="item-card">
@@ -318,7 +314,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const items = JSON.parse(localStorage.getItem("items")) || [];
-
         const item = items.find(i => i.id === itemId);
 
         item.responses.push({
@@ -331,8 +326,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         localStorage.setItem("items", JSON.stringify(items));
 
-        alert("Private response sent to the report owner.");
-
+        alert("Private response sent.");
         responseBox.value = "";
         displayItems();
     };
@@ -340,18 +334,13 @@ document.addEventListener("DOMContentLoaded", function () {
     window.claimItem = function (itemId) {
         const claimName = prompt("Enter your name for public claim:");
 
-        if (!claimName) {
-            return;
-        }
+        if (!claimName) return;
 
         const claimContact = prompt("Enter your contact number for public claim:");
 
-        if (!claimContact) {
-            return;
-        }
+        if (!claimContact) return;
 
         const items = JSON.parse(localStorage.getItem("items")) || [];
-
         const item = items.find(i => i.id === itemId);
 
         item.claims.push({
@@ -364,18 +353,16 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("items", JSON.stringify(items));
 
         alert("Your claim has been added publicly.");
-
         displayItems();
     };
-
-    /* MY REPORTS */
 
     window.displayMyReports = function () {
         const myReportList = document.getElementById("myReportList");
 
-        const items = JSON.parse(localStorage.getItem("items")) || [];
+        if (!myReportList) return;
 
-        const myItems = items.filter(item => item.ownerId === currentUser.id);
+        const items = JSON.parse(localStorage.getItem("items")) || [];
+        const myItems = items.filter(item => currentUser && item.ownerId === currentUser.id);
 
         const lostItems = myItems.filter(item => item.type === "Lost");
         const foundItems = myItems.filter(item => item.type === "Found");
@@ -454,9 +441,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.deleteMyReport = function (itemId) {
         const confirmDelete = confirm("Are you sure you want to delete this report?");
 
-        if (!confirmDelete) {
-            return;
-        }
+        if (!confirmDelete) return;
 
         let items = JSON.parse(localStorage.getItem("items")) || [];
 
@@ -469,13 +454,18 @@ document.addEventListener("DOMContentLoaded", function () {
         updateStats();
     };
 
-    /* PROFILE */
-
     function loadProfile() {
-        document.getElementById("profileName").value = currentUser.name;
-        document.getElementById("profileContact").value = currentUser.contact;
-        document.getElementById("profileImagePreview").src = currentUser.profileImage || defaultProfileImage;
-        document.getElementById("welcomeName").textContent = currentUser.name;
+        if (!currentUser) return;
+
+        const profileName = document.getElementById("profileName");
+        const profileContact = document.getElementById("profileContact");
+        const profileImagePreview = document.getElementById("profileImagePreview");
+        const welcomeName = document.getElementById("welcomeName");
+
+        if (profileName) profileName.value = currentUser.name;
+        if (profileContact) profileContact.value = currentUser.contact;
+        if (profileImagePreview) profileImagePreview.src = currentUser.profileImage || defaultProfileImage;
+        if (welcomeName) welcomeName.textContent = currentUser.name;
     }
 
     window.saveProfile = function () {
@@ -527,18 +517,23 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
         alert("Profile updated successfully.");
-
         loadProfile();
     }
-
-    /* STATS */
 
     function updateStats() {
         const items = JSON.parse(localStorage.getItem("items")) || [];
 
-        document.getElementById("totalReports").textContent = items.length;
-        document.getElementById("lostReports").textContent = items.filter(item => item.type === "Lost").length;
-        document.getElementById("foundReports").textContent = items.filter(item => item.type === "Found").length;
+        const totalReports = document.getElementById("totalReports");
+        const lostReports = document.getElementById("lostReports");
+        const foundReports = document.getElementById("foundReports");
+
+        if (totalReports) totalReports.textContent = items.length;
+        if (lostReports) lostReports.textContent = items.filter(item => item.type === "Lost").length;
+        if (foundReports) foundReports.textContent = items.filter(item => item.type === "Found").length;
+    }
+
+    if (currentUser) {
+        openMainApp();
     }
 
 });

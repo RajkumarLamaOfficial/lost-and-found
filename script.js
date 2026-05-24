@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let isLoginMode = true;
     let currentFilter = "All";
+    let myReportFilter = "All";
 
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
 

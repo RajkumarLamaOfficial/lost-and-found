@@ -552,7 +552,8 @@ footer{
     nav{
         gap: 15px;
     }
-    .response-message{
+}
+.response-message{
     margin-top: 15px;
     padding: 15px;
     background: #f8fafc;
@@ -590,4 +591,4 @@ footer{
 .hidden{
     display: none !important;
 }
-}
+

@@ -9,8 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const defaultProfileImage =
         "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
 
-    /* INITIAL STORAGE */
-
     if (!localStorage.getItem("users")) {
         localStorage.setItem("users", JSON.stringify([]));
     }
@@ -19,13 +17,9 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("items", JSON.stringify([]));
     }
 
-    /* AUTO LOGIN */
-
     if (currentUser) {
         openMainApp();
     }
-
-    /* AUTH */
 
     window.toggleAuthMode = function () {
 
@@ -65,8 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        /* LOGIN */
-
         if (isLoginMode) {
 
             const user = users.find(
@@ -87,8 +79,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             openMainApp();
         }
-
-        /* SIGNUP */
 
         else {
 
@@ -159,8 +149,6 @@ document.addEventListener("DOMContentLoaded", function () {
         location.reload();
     };
 
-    /* NAVIGATION */
-
     window.showSection = function (sectionId) {
 
         document.querySelectorAll(".page").forEach(page => {
@@ -183,9 +171,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         updateStats();
+        updateNotifications();
     };
-
-    /* FILTER */
 
     window.filterItems = function (filterType) {
 
@@ -210,7 +197,10 @@ document.addEventListener("DOMContentLoaded", function () {
         displayItems();
     };
 
-    /* REPORT FORM */
+    window.filterMyReports = function (filterType) {
+        myReportFilter = filterType;
+        displayMyReports();
+    };
 
     const itemForm = document.getElementById("itemForm");
 
@@ -296,8 +286,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         filterItems("All");
     }
-
-    /* DISPLAY ITEMS */
 
     window.displayItems = function () {
 
@@ -411,8 +399,6 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
     }
 
-    /* CLAIMS */
-
     function createClaimBox(item) {
 
         return `
@@ -487,8 +473,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         displayItems();
     };
-
-    /* CHAT */
 
     function createChatSection(item, hasClaimed) {
 
@@ -588,8 +572,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateNotifications();
     };
 
-    /* MY REPORTS */
-
     window.displayMyReports = function () {
 
         const myReportList =
@@ -598,10 +580,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const items =
             JSON.parse(localStorage.getItem("items")) || [];
 
-        const myItems =
+        let myItems =
             items.filter(item =>
                 item.ownerId === currentUser.id
             );
+
+        if (myReportFilter !== "All") {
+            myItems = myItems.filter(item => item.type === myReportFilter);
+        }
 
         const lost =
             myItems.filter(item =>
@@ -615,29 +601,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let html = "";
 
-        html += `
-            <h2 class="report-heading">
-                My Lost Reports
-            </h2>
-        `;
+        if (myReportFilter === "All" || myReportFilter === "Lost") {
 
-        html += lost.length > 0
-            ? lost.map(item =>
-                createMyReportCard(item)
-            ).join("")
-            : createEmptyMessage("No lost reports.");
+            html += `
+                <h2 class="report-heading">
+                    My Lost Reports
+                </h2>
+            `;
 
-        html += `
-            <h2 class="report-heading">
-                My Found Reports
-            </h2>
-        `;
+            html += lost.length > 0
+                ? lost.map(item =>
+                    createMyReportCard(item)
+                ).join("")
+                : createEmptyMessage("No lost reports.");
+        }
 
-        html += found.length > 0
-            ? found.map(item =>
-                createMyReportCard(item)
-            ).join("")
-            : createEmptyMessage("No found reports.");
+        if (myReportFilter === "All" || myReportFilter === "Found") {
+
+            html += `
+                <h2 class="report-heading">
+                    My Found Reports
+                </h2>
+            `;
+
+            html += found.length > 0
+                ? found.map(item =>
+                    createMyReportCard(item)
+                ).join("")
+                : createEmptyMessage("No found reports.");
+        }
 
         myReportList.innerHTML = html;
     };
@@ -786,6 +778,7 @@ document.addEventListener("DOMContentLoaded", function () {
         displayItems();
 
         updateStats();
+        updateNotifications();
     };
 
     function createEmptyMessage(text) {
@@ -796,8 +789,6 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         `;
     }
-
-    /* PROFILE */
 
     function loadProfile() {
 
@@ -900,8 +891,6 @@ document.addEventListener("DOMContentLoaded", function () {
             .textContent = currentUser.name;
     }
 
-    /* STATS */
-
     function updateStats() {
 
         const items =
@@ -918,8 +907,6 @@ document.addEventListener("DOMContentLoaded", function () {
             .textContent =
                 items.filter(i => i.type === "Found").length;
     }
-
-    /* NOTIFICATION */
 
     function updateNotifications() {
 

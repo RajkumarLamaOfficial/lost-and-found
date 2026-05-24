@@ -285,9 +285,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 <p><strong>Posted:</strong> ${item.createdAt}</p>
                 <p><strong>Verification:</strong> ${item.verification || "Not provided"}</p>
 
-                ${item.type === "Found" ? createClaimBox(item) : ""}
+                ${item.type === "Found" && !isOwner
+                    ? createClaimBox(item)
+                    : ""}
 
-                ${!isOwner ? createChatSection(item, hasClaimed) : ""}
+                ${!isOwner
+                    ? createChatSection(item, hasClaimed)
+                    : ""}
             </div>
         `;
     }
@@ -591,8 +595,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 </div>
 
-                ${item.type === "Found" ? createClaimBox(item) : ""}
-
+                ${item.type === "Found" && !isOwner ? createClaimBox(item) : ""}
+                
                 <button onclick="deleteReport(${item.id})" class="danger-btn">
                     <i class="fa-solid fa-trash"></i> Delete Report
                 </button>

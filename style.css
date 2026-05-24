@@ -552,4 +552,42 @@ footer{
     nav{
         gap: 15px;
     }
+    .response-message{
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 14px;
+    border-left: 4px solid #1d4ed8;
+}
+
+.response-message h4{
+    margin-bottom: 10px;
+    color: #1d4ed8;
+}
+
+.chat-message{
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+    border-left: 4px solid #0f766e;
+}
+
+.owner-reply{
+    border-left-color: #1d4ed8;
+    background: #eff6ff;
+}
+
+.notification-badge{
+    background: #dc2626;
+    color: white;
+    font-size: 11px;
+    padding: 3px 7px;
+    border-radius: 20px;
+    margin-left: 5px;
+}
+
+.hidden{
+    display: none !important;
+}
 }

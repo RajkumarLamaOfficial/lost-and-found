@@ -548,6 +548,14 @@ footer{
 /* RESPONSIVE */
 
 @media(max-width:768px){
+    .logo-section{
+    flex-direction: column;
+}
+
+    .logo{
+    width: 60px;
+    height: 60px;
+}
     .auth-card{
         grid-template-columns: 1fr;
     }

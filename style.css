@@ -104,24 +104,33 @@ header p{
     font-size: 17px;
 }
 .header-container{
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px 40px;
 }
 
 .logo-section{
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 22px;
 }
 
 .logo{
-    width: 75px;
-    height: 75px;
+    position: absolute;
+    left: 40px;
+    top: 20px;
+
+    width: 110px;
+    height: 110px;
+
     object-fit: contain;
-    background: white;
-    padding: 6px;
-    border-radius: 16px;
+
+    background: transparent;
+
+    padding: 0;
+    border-radius: 0;
 }
 
 /* NAVIGATION */

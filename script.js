@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
             category: document.getElementById("category").value,
             location: document.getElementById("location").value,
             description: document.getElementById("description").value,
-            verification: document.getElementById("verification").value,
+            
             image: imageData,
             claims: [],
             chats: [],
@@ -288,8 +288,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <p><strong>Description:</strong> ${item.description}</p>
                 <p><strong>Reported By:</strong> ${item.ownerName}</p>
                 <p><strong>Posted:</strong> ${item.createdAt}</p>
-                <p><strong>Verification:</strong> ${item.verification || "Not provided"}</p>
-
+                
                 ${item.type === "Found" && !isOwner ? createClaimBox(item) : ""}
 
                 ${!isOwner ? createChatSection(item, hasClaimed) : ""}

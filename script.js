@@ -17,6 +17,15 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("items", JSON.stringify([]));
     }
 
+    window.openImageModal = function(imageSrc) {
+        document.getElementById("imageModal").classList.remove("hidden");
+        document.getElementById("modalImage").src = imageSrc;
+    };
+
+    window.closeImageModal = function() {
+        document.getElementById("imageModal").classList.add("hidden");
+    };
+
 
 
     window.toggleAuthMode = function () {
@@ -275,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return `
             <div class="item-card">
-                ${item.image ? `<img src="${item.image}" class="item-image">` : ""}
+                ${item.image ? `<img src="${item.image}" class="item-image" onclick="openImageModal('${item.image}')">` : ""}
 
                 <span class="badge">${item.type}</span>
 
@@ -521,7 +530,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return `
             <div class="item-card">
-                ${item.image ? `<img src="${item.image}" class="item-image">` : ""}
+                ${item.image ? `<img src="${item.image}" class="item-image" onclick="openImageModal('${item.image}')">` : ""}
 
                 <span class="badge">${item.type}</span>
 
@@ -592,7 +601,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return `
             <div class="item-card">
-                ${item.image ? `<img src="${item.image}" class="item-image">` : ""}
+               ${item.image ? `<img src="${item.image}" class="item-image" onclick="openImageModal('${item.image}')">` : ""}
 
                 <span class="badge">${item.type}</span>
                 <span class="owner-badge">Your Report</span>

@@ -103,6 +103,26 @@ header h1{
 header p{
     font-size: 17px;
 }
+.header-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-section{
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.logo{
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+    background: white;
+    padding: 6px;
+    border-radius: 16px;
+}
 
 /* NAVIGATION */
 

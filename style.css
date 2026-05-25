@@ -557,13 +557,15 @@ footer{
 /* RESPONSIVE */
 
 @media(max-width:768px){
-    .logo-section{
-    flex-direction: column;
+    .logo{
+    position: static;
+    width: 75px;
+    height: 75px;
 }
 
-    .logo{
-    width: 60px;
-    height: 60px;
+    .logo-section{
+    flex-direction: column;
+    text-align: center;
 }
     .auth-card{
         grid-template-columns: 1fr;

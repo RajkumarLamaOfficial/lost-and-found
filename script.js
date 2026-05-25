@@ -17,9 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("items", JSON.stringify([]));
     }
 
-    if (currentUser) {
-        openMainApp();
-    }
+
 
     window.toggleAuthMode = function () {
         isLoginMode = !isLoginMode;
@@ -51,6 +49,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!email || !password) {
             alert("Please enter email and password.");
+            return;
+        }
+        if (!email.endsWith("@gmail.com")) {
+            alert("Please use a Gmail account.");
             return;
         }
 
@@ -902,5 +904,8 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("users", JSON.stringify(users));
         localStorage.setItem("currentUser", JSON.stringify(currentUser));
     }
+    if (currentUser) {
+    openMainApp();
+}
 
 });

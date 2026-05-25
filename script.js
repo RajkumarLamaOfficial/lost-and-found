@@ -17,17 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("items", JSON.stringify([]));
     }
 
-    window.openImageModal = function(imageSrc) {
-        document.getElementById("imageModal").classList.remove("hidden");
-        document.getElementById("modalImage").src = imageSrc;
-    };
-
-    window.closeImageModal = function() {
-        document.getElementById("imageModal").classList.add("hidden");
-    };
-
-
-
     window.toggleAuthMode = function () {
         isLoginMode = !isLoginMode;
 
@@ -135,6 +124,14 @@ document.addEventListener("DOMContentLoaded", function () {
     window.logoutUser = function () {
         localStorage.removeItem("currentUser");
         location.reload();
+    };
+    window.openImageModal = function(imageSrc) {
+        document.getElementById("imageModal").classList.remove("hidden");
+        document.getElementById("modalImage").src = imageSrc;
+    };
+
+    window.closeImageModal = function() {
+        document.getElementById("imageModal").classList.add("hidden");
     };
 
     window.showSection = function (sectionId) {
